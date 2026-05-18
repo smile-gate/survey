@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>겸업(겸직) 신고 및 활동 신청서</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Apple SD Gothic Neo','Noto Sans KR',sans-serif;background:#f5f5f5;color:#1a1a1a;font-size:15px;line-height:1.6}
+.wrap{max-width:780px;margin:0 auto;padding:2.5rem 1.25rem 5rem}
+h1{font-size:22px;font-weight:600;text-align:center;margin-bottom:0.3rem}
+.subtitle{font-size:13px;color:#666;text-align:center;margin-bottom:2rem}
+.card{background:#fff;border-radius:12px;border:1px solid #e5e5e5;padding:1.5rem;margin-bottom:1.25rem}
+.section-title{font-size:12px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid #f0f0f0;padding-bottom:8px;margin-bottom:1rem}
+.grid{display:grid;gap:12px}
+.grid-2{grid-template-columns:1fr 1fr}
+.grid-3{grid-template-columns:1fr 1fr 1fr}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:13px;color:#555;font-weight:500}
+.field input,.field select,.field textarea{font-size:14px;color:#1a1a1a;background:#fff;border:1px solid #ddd;border-radius:8px;padding:9px 11px;width:100%;outline:none;transition:border-color .15s}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:#555}
+.field textarea{resize:vertical;min-height:90px}
+.radio-group,.check-group{display:flex;flex-direction:column;gap:8px}
+.radio-group label,.check-group label{display:flex;align-items:flex-start;gap:9px;font-size:14px;cursor:pointer;line-height:1.5}
+.radio-group input,.check-group input{margin-top:3px;flex-shrink:0;accent-color:#333}
+.sub-field{margin-left:22px;margin-top:8px;padding:10px 14px;background:#f9f9f9;border-radius:8px;border:1px solid #ebebeb}
+.sub-field .sub-label{font-size:12px;color:#777;margin-bottom:7px;font-weight:500}
+.row{display:flex;gap:8px;align-items:center}
+.date-sep{font-size:13px;color:#999}
+.notice-box{background:#f9f9f9;border:1px solid #e8e8e8;border-radius:10px;padding:1.25rem;font-size:12.5px;color:#555;line-height:1.9}
+.annex{margin-top:12px;padding:10px 14px;background:#fff;border:1px solid #e5e5e5;border-radius:8px;font-size:12px;line-height:1.8;white-space:pre-wrap}
+.sig-area{border:1px solid #ddd;border-radius:8px;background:#fff;overflow:hidden}
+.sig-area canvas{display:block;width:100%;touch-action:none;cursor:crosshair;background:#fafafa}
+.sig-controls{display:flex;gap:8px;padding:8px 10px;border-top:1px solid #f0f0f0;background:#f9f9f9}
+.sig-controls button{font-size:12px;padding:5px 14px;border:1px solid #ddd;border-radius:6px;background:#fff;cursor:pointer}
+.sig-controls button:hover{background:#f0f0f0}
+.submit-btn{width:100%;padding:14px;font-size:16px;font-weight:600;background:#1a1a1a;border:none;border-radius:10px;color:#fff;cursor:pointer;transition:background .15s;margin-top:0.5rem}
+.submit-btn:hover{background:#333}
+.submit-btn:disabled{background:#999;cursor:not-allowed}
+.toast{display:none;margin-top:1rem;padding:14px 18px;border-radius:10px;font-size:14px;text-align:center}
+.toast.ok{background:#e6f4ea;color:#1e6b35;border:1px solid #b6dfc3}
+.toast.err{background:#fdecea;color:#8b1a1a;border:1px solid #f5b8b5}
+.drop-zone{border:1.5px dashed #ccc;border-radius:8px;padding:22px;text-align:center;font-size:13px;color:#888;cursor:pointer;transition:background .15s}
+.drop-zone:hover,.drop-zone.drag{background:#f5f5f5;border-color:#aaa}
+.drop-zone .icon{font-size:26px;margin-bottom:6px}
+.file-list{margin-top:8px;display:flex;flex-direction:column;gap:5px}
+.file-item{display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:5px 10px;background:#f5f5f5;border-radius:6px}
+.file-item button{font-size:11px;padding:2px 9px;border:1px solid #ddd;border-radius:5px;background:#fff;cursor:pointer}
+.required{color:#e03}
+@media(max-width:600px){.grid-2,.grid-3{grid-template-columns:1fr}.row{flex-direction:column;align-items:flex-start}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>겸업(겸직) 신고 및 활동 신청서</h1>
+  <p class="subtitle">아래 내용을 성실히 작성한 후 제출해 주세요.</p>
+
+  <form id="mainForm">
+
+    <div class="card">
+      <p class="section-title">신청인 정보</p>
+      <div class="grid grid-3">
+        <div class="field"><label>소속 <span class="required">*</span></label><input type="text" name="소속" required placeholder="부서명"></div>
+        <div class="field"><label>사번 <span class="required">*</span></label><input type="text" name="사번" required placeholder="사번"></div>
+        <div class="field"><label>성명 <span class="required">*</span></label><input type="text" name="성명" required placeholder="홍길동"></div>
+      </div>
+      <div class="grid grid-3" style="margin-top:12px">
+        <div class="field"><label>직책</label><input type="text" name="직책" placeholder="예) 팀장"></div>
+        <div class="field"><label>호칭</label><input type="text" name="호칭" placeholder="예) 책임"></div>
+        <div class="field"><label>직무</label><input type="text" name="직무" placeholder="예) 개발"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="section-title">겸업 기본 정보</p>
+      <div class="grid grid-2">
+        <div class="field"><label>겸업 회사명</label><input type="text" name="겸업_회사명" placeholder="회사명 또는 활동명"></div>
+        <div class="field"><label>업종</label><input type="text" name="업종" placeholder="예) IT, 교육, 개인활동 등"></div>
+      </div>
+      <div class="field" style="margin-top:12px">
+        <label>겸업 기간</label>
+        <div class="row">
+          <input type="date" name="겸업_시작일" style="flex:1">
+          <span class="date-sep">~</span>
+          <input type="date" name="겸업_종료일" style="flex:1">
+        </div>
+      </div>
+      <div class="grid grid-2" style="margin-top:12px">
+        <div class="field">
+          <label>주당 근무시간</label>
+          <input type="number" name="주당근무시간" placeholder="예) 8" min="0" max="168">
+        </div>
+        <div class="field">
+          <label>야간/심야(24시~6시) 근무 여부</label>
+          <div class="radio-group" style="flex-direction:row;gap:20px;margin-top:4px">
+            <label><input type="radio" name="야간심야여부" value="예"> 예</label>
+            <label><input type="radio" name="야간심야여부" value="아니오"> 아니오</label>
+          </div>
+        </div>
+      </div>
+      <div class="field" style="margin-top:12px">
+        <label>연차 사용 여부</label>
+        <div class="radio-group" style="flex-direction:row;gap:20px;margin-top:4px">
+          <label><input type="radio" name="연차사용여부" value="한시적"> 한시적</label>
+          <label><input type="radio" name="연차사용여부" value="정기적"> 정기적</label>
+          <label><input type="radio" name="연차사용여부" value="해당없음"> 해당없음</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="section-title">겸업 형태</p>
+      <div class="radio-group">
+        <label><input type="radio" name="겸업형태" value="사업체직접운영"> 사업체 직접 운영 (사업자등록)</label>
+        <div class="sub-field" id="sub_bizowner" style="display:none">
+          <div class="sub-label">사업자등록 명의</div>
+          <div class="radio-group" style="flex-direction:row;gap:16px">
+            <label><input type="radio" name="사업자등록명의" value="본인"> 본인</label>
+            <label><input type="radio" name="사업자등록명의" value="가족"> 가족</label>
+            <label><input type="radio" name="사업자등록명의" value="타인"> 타인</label>
+          </div>
+        </div>
+        <label><input type="radio" name="겸업형태" value="타업체소속직책직무수행"> 타업체 소속 직책·직무 수행</label>
+        <div class="sub-field" id="sub_insurance" style="display:none">
+          <div class="sub-label">타사 4대보험 가입 여부</div>
+          <div class="radio-group" style="flex-direction:row;gap:16px">
+            <label><input type="radio" name="4대보험가입" value="가입"> 가입</label>
+            <label><input type="radio" name="4대보험가입" value="미가입"> 미가입</label>
+          </div>
+        </div>
+        <label><input type="radio" name="겸업형태" value="부업개별활동수행"> 부업이나 개별활동 수행</label>
+        <div class="sub-field" id="sub_insurance2" style="display:none">
+          <div class="sub-label">타사 4대보험 가입 여부</div>
+          <div class="radio-group" style="flex-direction:row;gap:16px">
+            <label><input type="radio" name="4대보험가입_부업" value="가입"> 가입</label>
+            <label><input type="radio" name="4대보험가입_부업" value="미가입"> 미가입</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="section-title">업무 종류 (복수 선택 가능)</p>
+      <div class="check-group">
+        <label><input type="checkbox" name="업무종류" value="일회성_횟수제한_아르바이트"> 일회성·횟수제한 아르바이트 (시험감독, 매대알바 등)</label>
+        <label><input type="checkbox" name="업무종류" value="상시_정기적_외부출강"> 상시·정기적 외부기관(대학·학원 등) 출강</label>
+        <label><input type="checkbox" name="업무종류" value="단기_일회성_외부출강"> 단기·일회성 외부기관(대학·학원 등) 출강</label>
+        <label><input type="checkbox" name="업무종류" value="외부봉사_공연_취미_과외_개인활동"> 외부 봉사활동, 공연, 취미나 특기, 과외 등 개인활동</label>
+        <label><input type="checkbox" name="업무종류" value="멘토링_컨설팅"> 멘토링·컨설팅 등 (대학생 취업컨설팅, 직무컨설팅 등)</label>
+        <label><input type="checkbox" name="업무종류" value="창작활동_SNS"> 창작활동 또는 SNS (유튜브, 개인방송, 블로그, 도서출판, 작곡 등)</label>
+        <label><input type="checkbox" name="업무종류" value="CCL_게임개발_판매"> CCL을 통한 게임개발 및 판매활동</label>
+        <label><input type="checkbox" name="업무종류" value="CCL_게임개발_부속활동"> CCL을 통한 게임개발 관련 부속활동 (유튜브, 대외행사, 박람회 참가 등)</label>
+        <label><input type="checkbox" name="업무종류" value="회사_업장_온라인몰_직접관리운영"> 회사·업장·온라인몰 등 직접 관리·운영</label>
+        <label><input type="checkbox" name="업무종류" value="타사출근_사무_개발_아트업무수행"> 타사 출근하여 사무·개발·아트 업무 등 수행</label>
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="section-title">겸업 내용 및 직무 설명</p>
+      <div class="field">
+        <label>상세 내용</label>
+        <textarea name="겸업내용및직무설명" placeholder="겸업 내용, 직무, 역할 등을 구체적으로 입력해 주세요."></textarea>
+      </div>
+      <div class="field" style="margin-top:12px">
+        <label>참고 URL (선택)</label>
+        <input type="url" name="참고URL" placeholder="https://...">
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="section-title">첨부파일 (선택)</p>
+      <div class="drop-zone" id="dropZone">
+        <div class="icon">📎</div>
+        클릭하거나 파일을 여기에 드래그해서 첨부하세요
+        <input type="file" id="fileInput" multiple style="display:none">
+      </div>
+      <div class="file-list" id="fileList"></div>
+      <p style="font-size:12px;color:#999;margin-top:6px">* 첨부파일명이 제출 내용과 함께 전달됩니다.</p>
+    </div>
+
+    <div class="card">
+      <p class="section-title">유의사항 및 서약</p>
+      <div class="notice-box">상기 본인은 위 겸직활동으로 회사의 정당한 이익을 저해하는 행위와 활동 과정에서 회사 정보노출 및 회사 직무 관련 활동 등을 포함한 영업비밀 사항을 유출하지 않을 것이며 이로 인해 정상적인 근로제공의 지장이나 회사의 경영질서 문란 및 대외적 신용과 이미지 훼손을 주지 않을 것을 서약합니다. 아울러, 본인은 상기 겸직유형 및 세부내용(타업체, 횟수, 활동시간, 실제 활동 내용, 특정된 보수액 등)을 전제로 겸직활동을 허용하는 것임을 인지하고, 겸직 활동이 위 사실과 다르게 이루어지거나 『별첨』의 사유 발생시, 사전에 반드시 회사에 그 사실을 통지하여 승인 여부를 재심사 받아야 하며, 승인이 철회될 경우 그 즉시 겸직을 해소할 것을 서약합니다.
+
+* 사전 신고를 하여야 함에도 미신고하는 경우 사유 발생일 기준으로 별도 의사표시 없이 겸직 승인은 자동 철회되며, 그에 따른 취업규칙 등 제규정에 따른 조치는 별개로 이뤄질 수 있습니다.
+* 기타 회사는 『별첨』의 사유 발생 여부를 확인하기 위해 본인에게 소명을 요구할 수 있으며, 본인이 정당한 사유 없이 이에 응하지 않거나, 『별첨』의 사유가 발생한 경우, 기존 승인된 겸업활동은 자동으로 철회되고, 그에 따른 인사조치가 이뤄질 수 있음을 유의하시기 바랍니다.
+<div class="annex">『별첨』 자동 철회 사유
+
+1. 승인받은 겸업 활동과 실제 겸업 활동의 내용이 다른 경우
+2. 회사 또는 계열사와 경업관계에 있거나 동종이거나 유사한 겸업활동을 하는 경우
+3. 겸업활동으로 인해 본인 또는 회사, 동료의 업무제공에 지장을 초래하거나 초래할 우려가 있는 경우
+4. 근로계약상 소정근로시간에 겸업활동을 하는 경우
+5. 회사의 영업비밀을 침해하거나 침해할 우려가 있는 경우
+6. 회사의 신용, 명예를 훼손하거나 훼손할 우려가 있는 경우
+7. 회사 또는 계열사, 고객사 등 이해관계자 간에 이해 충돌이 발생하거나 발생할 우려가 있는 경우
+8. 겸업 활동으로 인해 회사의 공식적인 의견이나 입장으로 오인될 소지가 있는 경우
+9. 기타 이에 준하는 행위를 하는 경우</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="section-title">서명 <span class="required">*</span></p>
+      <p style="font-size:13px;color:#777;margin-bottom:8px">아래 박스 안에 마우스 또는 터치로 서명해 주세요.</p>
+      <div class="sig-area">
+        <canvas id="sigCanvas" height="150"></canvas>
+        <div class="sig-controls">
+          <button type="button" id="clearSig">서명 지우기</button>
+        </div>
+      </div>
+      <input type="hidden" name="서명완료여부" id="sigData">
+    </div>
+
+    <button type="submit" class="submit-btn" id="submitBtn">신청서 제출</button>
+    <div class="toast" id="toast"></div>
+
+  </form>
+</div>
+
+<script>
+// 겸업형태 조건부 표시
+document.querySelectorAll('input[name="겸업형태"]').forEach(r => {
+  r.addEventListener('change', () => {
+    document.getElementById('sub_bizowner').style.display = 'none';
+    document.getElementById('sub_insurance').style.display = 'none';
+    document.getElementById('sub_insurance2').style.display = 'none';
+    if (r.value === '사업체직접운영') document.getElementById('sub_bizowner').style.display = 'block';
+    else if (r.value === '타업체소속직책직무수행') document.getElementById('sub_insurance').style.display = 'block';
+    else if (r.value === '부업개별활동수행') document.getElementById('sub_insurance2').style.display = 'block';
+  });
+});
+
+// 서명 캔버스
+const canvas = document.getElementById('sigCanvas');
+const ctx = canvas.getContext('2d');
+let drawing = false, hasSig = false;
+function resizeCanvas() {
+  const w = canvas.offsetWidth;
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = w * dpr;
+  canvas.height = 150 * dpr;
+  canvas.style.height = '150px';
+  ctx.scale(dpr, dpr);
+  ctx.strokeStyle = '#1a1a1a'; ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+function getPos(e) {
+  const r = canvas.getBoundingClientRect();
+  const src = e.touches ? e.touches[0] : e;
+  return { x: src.clientX - r.left, y: src.clientY - r.top };
+}
+canvas.addEventListener('mousedown', e => { drawing = true; const p = getPos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); });
+canvas.addEventListener('mousemove', e => { if (!drawing) return; const p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); hasSig = true; });
+canvas.addEventListener('mouseup', () => { drawing = false; });
+canvas.addEventListener('touchstart', e => { e.preventDefault(); drawing = true; const p = getPos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); }, { passive: false });
+canvas.addEventListener('touchmove', e => { e.preventDefault(); if (!drawing) return; const p = getPos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); hasSig = true; }, { passive: false });
+canvas.addEventListener('touchend', () => { drawing = false; });
+document.getElementById('clearSig').addEventListener('click', () => {
+  const dpr = window.devicePixelRatio || 1;
+  ctx.clearRect(0, 0, canvas.width / dpr, 150);
+  hasSig = false; document.getElementById('sigData').value = '';
+});
+
+// 파일 첨부
+const dropZone = document.getElementById('dropZone');
+const fileInput = document.getElementById('fileInput');
+const fileList = document.getElementById('fileList');
+let files = [];
+dropZone.addEventListener('click', () => fileInput.click());
+fileInput.addEventListener('change', e => addFiles([...e.target.files]));
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag'));
+dropZone.addEventListener('drop', e => { e.preventDefault(); dropZone.classList.remove('drag'); addFiles([...e.dataTransfer.files]); });
+function addFiles(newFiles) { newFiles.forEach(f => { if (!files.find(x => x.name === f.name)) files.push(f); }); renderFiles(); }
+function renderFiles() {
+  fileList.innerHTML = '';
+  files.forEach((f, i) => {
+    const div = document.createElement('div'); div.className = 'file-item';
+    div.innerHTML = `<span>📄 ${f.name} <span style="color:#aaa">(${(f.size / 1024).toFixed(1)}KB)</span></span><button type="button" onclick="removeFile(${i})">삭제</button>`;
+    fileList.appendChild(div);
+  });
+}
+window.removeFile = function(i) { files.splice(i, 1); renderFiles(); };
+
+// 제출
+document.getElementById('mainForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  if (!hasSig) { alert('서명을 해주세요.'); return; }
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true; btn.textContent = '제출 중...';
+
+  const fd = new FormData(this);
+  const checkVals = [...document.querySelectorAll('input[name="업무종류"]:checked')].map(x => x.value).join(', ');
+  fd.set('업무종류', checkVals || '선택없음');
+  fd.set('서명완료여부', '서명 완료');
+  if (files.length > 0) fd.set('첨부파일목록', files.map(f => f.name).join(', '));
+
+  // 수신 이메일: jungel@smilegate.com (Formspree 대시보드에서도 설정 가능)
+  try {
+    const res = await fetch('https://formspree.io/f/mqejkpgg', {
+      method: 'POST', body: fd, headers: { Accept: 'application/json' }
+    });
+    const toast = document.getElementById('toast');
+    if (res.ok) {
+      toast.className = 'toast ok';
+      toast.textContent = '✓ 신청서가 성공적으로 제출되었습니다. 담당자에게 전달됩니다.';
+      toast.style.display = 'block';
+      btn.textContent = '제출 완료 ✓';
+    } else {
+      toast.className = 'toast err';
+      toast.textContent = '제출에 실패했습니다. 잠시 후 다시 시도해 주세요.';
+      toast.style.display = 'block';
+      btn.disabled = false; btn.textContent = '신청서 제출';
+    }
+  } catch (err) {
+    const toast = document.getElementById('toast');
+    toast.className = 'toast err';
+    toast.textContent = '네트워크 오류가 발생했습니다. 인터넷 연결을 확인해 주세요.';
+    toast.style.display = 'block';
+    btn.disabled = false; btn.textContent = '신청서 제출';
+  }
+});
+</script>
+</body>
+</html>
