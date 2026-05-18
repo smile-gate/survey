@@ -17,7 +17,7 @@ h1{font-size:22px;font-weight:600;text-align:center;margin-bottom:0.3rem}
 .grid-3{grid-template-columns:1fr 1fr 1fr}
 .field{display:flex;flex-direction:column;gap:5px}
 .field label{font-size:13px;color:#555;font-weight:500}
-.field input,.field select,.field textarea{font-size:14px;color:#1a1a1a;background:#fff;border:1px solid #ddd;border-radius:8px;padding:9px 11px;width:100%;outline:none;transition:border-color .15s}
+.field input,.field select,.field textarea{font-size:14px;color:#1a1a1a;background:#fff;border:1px solid #ddd;border-radius:8px;padding:9px 11px;width:100%;outline:none;transition:border-color .15s;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Apple SD Gothic Neo','Noto Sans KR',sans-serif}
 .field input:focus,.field select:focus,.field textarea:focus{border-color:#555}
 .field textarea{resize:vertical;min-height:90px}
 .radio-group,.check-group{display:flex;flex-direction:column;gap:8px}
@@ -53,7 +53,7 @@ h1{font-size:22px;font-weight:600;text-align:center;margin-bottom:0.3rem}
 <body>
 <div class="wrap">
   <div style="text-align:center;margin-bottom:1.25rem">
-    <img src="https://landombox.github.io/survey/smilegate_logo.png" alt="스마일게이트 로고" style="height:32px;width:auto" onerror="this.style.display='none'">
+    <img src="smilegate_logo.png" alt="스마일게이트 로고" style="height:32px;width:auto" onerror="this.style.display='none'">
   </div>
   <h1>겸업 활동 신청서</h1>
   <p class="subtitle">아래 내용을 성실히 작성한 후 제출해 주세요.</p>
@@ -83,12 +83,12 @@ h1{font-size:22px;font-weight:600;text-align:center;margin-bottom:0.3rem}
       <div class="field" style="margin-top:12px">
         <label>겸업 기간</label>
         <div class="row">
-          <input type="date" name="겸업_시작일" style="flex:1;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:14px;color:#1a1a1a">
+          <input type="date" name="겸업_시작일" style="flex:1">
           <span class="date-sep">~</span>
-          <input type="date" name="겸업_종료일" style="flex:1;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:14px;color:#1a1a1a">
+          <input type="date" name="겸업_종료일" style="flex:1">
         </div>
       </div>
-              <div class="grid grid-2" style="margin-top:12px">
+      <div class="grid grid-2" style="margin-top:12px">
         <div class="field">
           <label>주당 근무시간</label>
           <input type="number" name="주당근무시간" placeholder="예) 8" min="0" max="168">
@@ -155,7 +155,6 @@ h1{font-size:22px;font-weight:600;text-align:center;margin-bottom:0.3rem}
         <label><input type="checkbox" name="업무종류" value="창작활동_SNS"> 창작활동 또는 SNS (유튜브, 개인방송, 블로그, 도서출판, 작곡 등)</label>
         <label><input type="checkbox" name="업무종류" value="CCL_게임개발_판매"> CCL을 통한 게임개발 및 판매활동</label>
         <label><input type="checkbox" name="업무종류" value="CCL_게임개발_부속활동"> CCL을 통한 게임개발 관련 부속활동 (유튜브, 대외행사, 박람회 참가 등)</label>
-
       </div>
     </div>
 
@@ -163,7 +162,7 @@ h1{font-size:22px;font-weight:600;text-align:center;margin-bottom:0.3rem}
       <p class="section-title">겸업 내용 및 직무 설명</p>
       <div class="field">
         <label>상세 내용</label>
-        <textarea name="겸업내용및직무설명" placeholder="겸업 내용, 직무, 역할 등을 구체적으로 입력해 주세요." style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:14px"></textarea>
+        <textarea name="겸업내용및직무설명" placeholder="겸업 내용, 직무, 역할 등을 구체적으로 입력해 주세요."></textarea>
       </div>
       <div class="field" style="margin-top:12px">
         <label>참고 URL (선택)</label>
@@ -221,7 +220,6 @@ h1{font-size:22px;font-weight:600;text-align:center;margin-bottom:0.3rem}
 </div>
 
 <script>
-// 겸업형태 조건부 표시
 document.querySelectorAll('input[name="겸업형태"]').forEach(r => {
   r.addEventListener('change', () => {
     document.getElementById('sub_bizowner').style.display = 'none';
@@ -233,7 +231,6 @@ document.querySelectorAll('input[name="겸업형태"]').forEach(r => {
   });
 });
 
-// 서명 캔버스
 const canvas = document.getElementById('sigCanvas');
 const ctx = canvas.getContext('2d');
 let drawing = false, hasSig = false;
@@ -265,7 +262,6 @@ document.getElementById('clearSig').addEventListener('click', () => {
   hasSig = false; document.getElementById('sigData').value = '';
 });
 
-// 파일 첨부
 const dropZone = document.getElementById('dropZone');
 const fileInput = document.getElementById('fileInput');
 const fileList = document.getElementById('fileList');
@@ -286,7 +282,6 @@ function renderFiles() {
 }
 window.removeFile = function(i) { files.splice(i, 1); renderFiles(); };
 
-// 제출
 document.getElementById('mainForm').addEventListener('submit', async function(e) {
   e.preventDefault();
   if (!hasSig) { alert('서명을 해주세요.'); return; }
@@ -299,7 +294,6 @@ document.getElementById('mainForm').addEventListener('submit', async function(e)
   fd.set('서명완료여부', '서명 완료');
   if (files.length > 0) fd.set('첨부파일목록', files.map(f => f.name).join(', '));
 
-  // 수신 이메일: jungel@smilegate.com (Formspree 대시보드에서도 설정 가능)
   try {
     const res = await fetch('https://formspree.io/f/mqejkpgg', {
       method: 'POST', body: fd, headers: { Accept: 'application/json' }
