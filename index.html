@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>겸업(겸직) 신고 및 활동 신청서</title>
+<title>겸업 활동 신청서</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Apple SD Gothic Neo','Noto Sans KR',sans-serif;background:#f5f5f5;color:#1a1a1a;font-size:15px;line-height:1.6}
@@ -55,7 +55,7 @@ h1{font-size:22px;font-weight:600;text-align:center;margin-bottom:0.3rem}
   <div style="text-align:center;margin-bottom:1.25rem">
     <img src="https://landombox.github.io/survey/smilegate_logo.png" alt="스마일게이트 로고" style="height:32px;width:auto" onerror="this.style.display='none'">
   </div>
-  <h1>겸업(겸직) 신고 및 활동 신청서</h1>
+  <h1>겸업 활동 신청서</h1>
   <p class="subtitle">아래 내용을 성실히 작성한 후 제출해 주세요.</p>
 
   <form id="mainForm">
@@ -145,6 +145,8 @@ h1{font-size:22px;font-weight:600;text-align:center;margin-bottom:0.3rem}
     <div class="card">
       <p class="section-title">업무 종류 (복수 선택 가능)</p>
       <div class="check-group">
+        <label><input type="checkbox" name="업무종류" value="회사_업장_온라인몰_직접관리운영"> 회사·업장·온라인몰 등 직접 관리·운영</label>
+        <label><input type="checkbox" name="업무종류" value="타사출근_사무_개발_아트업무수행"> 타사 출근하여 사무·개발·아트 업무 등 수행</label>
         <label><input type="checkbox" name="업무종류" value="일회성_횟수제한_아르바이트"> 일회성·횟수제한 아르바이트 (시험감독, 매대알바 등)</label>
         <label><input type="checkbox" name="업무종류" value="상시_정기적_외부출강"> 상시·정기적 외부기관(대학·학원 등) 출강</label>
         <label><input type="checkbox" name="업무종류" value="단기_일회성_외부출강"> 단기·일회성 외부기관(대학·학원 등) 출강</label>
@@ -153,8 +155,7 @@ h1{font-size:22px;font-weight:600;text-align:center;margin-bottom:0.3rem}
         <label><input type="checkbox" name="업무종류" value="창작활동_SNS"> 창작활동 또는 SNS (유튜브, 개인방송, 블로그, 도서출판, 작곡 등)</label>
         <label><input type="checkbox" name="업무종류" value="CCL_게임개발_판매"> CCL을 통한 게임개발 및 판매활동</label>
         <label><input type="checkbox" name="업무종류" value="CCL_게임개발_부속활동"> CCL을 통한 게임개발 관련 부속활동 (유튜브, 대외행사, 박람회 참가 등)</label>
-        <label><input type="checkbox" name="업무종류" value="회사_업장_온라인몰_직접관리운영"> 회사·업장·온라인몰 등 직접 관리·운영</label>
-        <label><input type="checkbox" name="업무종류" value="타사출근_사무_개발_아트업무수행"> 타사 출근하여 사무·개발·아트 업무 등 수행</label>
+
       </div>
     </div>
 
@@ -162,7 +163,7 @@ h1{font-size:22px;font-weight:600;text-align:center;margin-bottom:0.3rem}
       <p class="section-title">겸업 내용 및 직무 설명</p>
       <div class="field">
         <label>상세 내용</label>
-        <textarea name="겸업내용및직무설명" placeholder="겸업 내용, 직무, 역할 등을 구체적으로 입력해 주세요."></textarea>
+        <textarea name="겸업내용및직무설명" placeholder="겸업 내용, 직무, 역할 등을 구체적으로 입력해 주세요." style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:14px"></textarea>
       </div>
       <div class="field" style="margin-top:12px">
         <label>참고 URL (선택)</label>
