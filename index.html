@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>겸업 활동 신청서</title>
+<title>겸업(겸직) 신고 및 활동 신청서</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Apple SD Gothic Neo','Noto Sans KR',sans-serif;background:#f5f5f5;color:#1a1a1a;font-size:15px;line-height:1.6}
@@ -52,7 +52,10 @@ h1{font-size:22px;font-weight:600;text-align:center;margin-bottom:0.3rem}
 </head>
 <body>
 <div class="wrap">
-  <h1>겸업 활동 신청서</h1>
+  <div style="text-align:center;margin-bottom:1.25rem">
+    <img src="https://landombox.github.io/survey/smilegate_logo.png" alt="스마일게이트 로고" style="height:32px;width:auto" onerror="this.style.display='none'">
+  </div>
+  <h1>겸업(겸직) 신고 및 활동 신청서</h1>
   <p class="subtitle">아래 내용을 성실히 작성한 후 제출해 주세요.</p>
 
   <form id="mainForm">
@@ -80,30 +83,30 @@ h1{font-size:22px;font-weight:600;text-align:center;margin-bottom:0.3rem}
       <div class="field" style="margin-top:12px">
         <label>겸업 기간</label>
         <div class="row">
-          <input type="date" name="겸업_시작일" style="flex:1">
+          <input type="date" name="겸업_시작일" style="flex:1;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:14px;color:#1a1a1a">
           <span class="date-sep">~</span>
-          <input type="date" name="겸업_종료일" style="flex:1">
+          <input type="date" name="겸업_종료일" style="flex:1;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Apple SD Gothic Neo','Noto Sans KR',sans-serif;font-size:14px;color:#1a1a1a">
         </div>
       </div>
-      <div class="grid grid-2" style="margin-top:12px">
+              <div class="grid grid-2" style="margin-top:12px">
         <div class="field">
           <label>주당 근무시간</label>
           <input type="number" name="주당근무시간" placeholder="예) 8" min="0" max="168">
         </div>
         <div class="field">
           <label>야간/심야(24시~6시) 근무 여부</label>
-          <div class="radio-group" style="flex-direction:row;gap:20px;margin-top:4px">
-            <label><input type="radio" name="야간심야여부" value="예"> 예</label>
-            <label><input type="radio" name="야간심야여부" value="아니오"> 아니오</label>
+          <div style="display:flex;flex-direction:row;gap:20px;margin-top:8px;align-items:center;flex-wrap:nowrap">
+            <label style="display:flex;align-items:center;gap:6px;font-size:14px;white-space:nowrap;cursor:pointer"><input type="radio" name="야간심야여부" value="예" style="margin:0;accent-color:#333"> 예</label>
+            <label style="display:flex;align-items:center;gap:6px;font-size:14px;white-space:nowrap;cursor:pointer"><input type="radio" name="야간심야여부" value="아니오" style="margin:0;accent-color:#333"> 아니오</label>
           </div>
         </div>
       </div>
       <div class="field" style="margin-top:12px">
         <label>연차 사용 여부</label>
-        <div class="radio-group" style="flex-direction:row;gap:20px;margin-top:4px">
-          <label><input type="radio" name="연차사용여부" value="한시적"> 한시적</label>
-          <label><input type="radio" name="연차사용여부" value="정기적"> 정기적</label>
-          <label><input type="radio" name="연차사용여부" value="해당없음"> 해당없음</label>
+        <div style="display:flex;flex-direction:row;gap:20px;margin-top:8px;align-items:center;flex-wrap:nowrap">
+          <label style="display:flex;align-items:center;gap:6px;font-size:14px;white-space:nowrap;cursor:pointer"><input type="radio" name="연차사용여부" value="한시적" style="margin:0;accent-color:#333"> 한시적</label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:14px;white-space:nowrap;cursor:pointer"><input type="radio" name="연차사용여부" value="정기적" style="margin:0;accent-color:#333"> 정기적</label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:14px;white-space:nowrap;cursor:pointer"><input type="radio" name="연차사용여부" value="해당없음" style="margin:0;accent-color:#333"> 해당없음</label>
         </div>
       </div>
     </div>
