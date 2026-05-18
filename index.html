@@ -217,6 +217,56 @@ h1{font-size:22px;font-weight:600;text-align:center;margin-bottom:0.3rem}
     <div class="toast" id="toast"></div>
 
   </form>
+
+  <div id="approvalLinkBox" style="display:none;margin-top:1.5rem">
+    <div class="card" style="border:1.5px solid #d0e8d0">
+      <p class="section-title" style="color:#2a7a2a">✓ 제출 완료 — 직책자 승인 요청</p>
+      <p style="font-size:14px;color:#444;margin-bottom:12px">아래 링크를 직책자에게 카톡 또는 메일로 전달해 주세요. 직책자가 링크를 열어 서명하면 승인이 완료됩니다.</p>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input id="approvalLinkInput" type="text" readonly style="flex:1;font-size:13px;background:#f5f5f5;border:1px solid #ddd;border-radius:8px;padding:9px 11px;color:#333;font-family:inherit">
+        <button onclick="copyApprovalLink()" style="padding:9px 16px;font-size:13px;font-weight:500;background:#1a1a1a;color:#fff;border:none;border-radius:8px;cursor:pointer;white-space:nowrap">링크 복사</button>
+      </div>
+      <p id="copyMsg" style="display:none;font-size:12px;color:#2a7a2a;margin-top:6px">✓ 복사되었습니다!</p>
+    </div>
+  </div>
+</div>
+
+<div id="approvalPage" style="display:none">
+  <div class="wrap" style="max-width:560px">
+    <div style="margin-bottom:1rem">
+      <img src="smilegate_logo.png" alt="스마일게이트 로고" style="height:11px;width:auto" onerror="this.style.display:'none'">
+    </div>
+    <h1 style="font-size:20px">겸업 활동 승인 요청</h1>
+    <p class="subtitle">아래 신청 내용을 확인하고 서명해 주세요.</p>
+
+    <div class="card">
+      <p class="section-title">신청 내용</p>
+      <div class="grid grid-2">
+        <div class="field"><label>성명</label><div id="ap_name" style="font-size:14px;padding:9px 0;color:#1a1a1a"></div></div>
+        <div class="field"><label>소속</label><div id="ap_dept" style="font-size:14px;padding:9px 0;color:#1a1a1a"></div></div>
+        <div class="field"><label>겸업 회사명</label><div id="ap_company" style="font-size:14px;padding:9px 0;color:#1a1a1a"></div></div>
+        <div class="field"><label>겸업 기간</label><div id="ap_period" style="font-size:14px;padding:9px 0;color:#1a1a1a"></div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="section-title">직책자 서명 <span class="required">*</span></p>
+      <div class="field" style="margin-bottom:12px">
+        <label>직책자 성명 <span class="required">*</span></label>
+        <input type="text" id="ap_approverName" placeholder="성명 입력" style="font-size:14px;color:#1a1a1a;background:#fff;border:1px solid #ddd;border-radius:8px;padding:9px 11px;width:100%;outline:none;font-family:inherit">
+      </div>
+      <p style="font-size:13px;color:#777;margin-bottom:8px">아래 박스 안에 마우스 또는 터치로 서명해 주세요.</p>
+      <div class="sig-area">
+        <canvas id="apSigCanvas" height="150"></canvas>
+        <div class="sig-controls">
+          <button type="button" id="apClearSig">서명 지우기</button>
+        </div>
+      </div>
+    </div>
+
+    <button onclick="submitApproval()" class="submit-btn" id="apSubmitBtn">승인 서명 제출</button>
+    <div class="toast" id="apToast"></div>
+  </div>
 </div>
 
 <script>
@@ -301,9 +351,21 @@ document.getElementById('mainForm').addEventListener('submit', async function(e)
     const toast = document.getElementById('toast');
     if (res.ok) {
       toast.className = 'toast ok';
-      toast.textContent = '✓ 신청서가 성공적으로 제출되었습니다. 담당자에게 전달됩니다.';
+      toast.textContent = '✓ 신청서가 제출되었습니다. 아래 링크를 직책자에게 전달해 주세요.';
       toast.style.display = 'block';
       btn.textContent = '제출 완료 ✓';
+
+      const name = document.querySelector('input[name="성명"]').value;
+      const dept = document.querySelector('input[name="소속"]').value;
+      const company = document.querySelector('input[name="겸업_회사명"]').value;
+      const startDate = document.querySelector('input[name="겸업_시작일"]').value;
+      const endDate = document.querySelector('input[name="겸업_종료일"]').value;
+      const period = (startDate && endDate) ? `${startDate} ~ ${endDate}` : (startDate || '미입력');
+
+      const params = new URLSearchParams({ name, dept, company, period });
+      const approvalUrl = `${location.origin}${location.pathname}?approve=1&${params.toString()}`;
+      document.getElementById('approvalLinkInput').value = approvalUrl;
+      document.getElementById('approvalLinkBox').style.display = 'block';
     } else {
       toast.className = 'toast err';
       toast.textContent = '제출에 실패했습니다. 잠시 후 다시 시도해 주세요.';
@@ -318,6 +380,97 @@ document.getElementById('mainForm').addEventListener('submit', async function(e)
     btn.disabled = false; btn.textContent = '신청서 제출';
   }
 });
+
+function copyApprovalLink() {
+  const input = document.getElementById('approvalLinkInput');
+  navigator.clipboard.writeText(input.value).then(() => {
+    document.getElementById('copyMsg').style.display = 'block';
+    setTimeout(() => document.getElementById('copyMsg').style.display = 'none', 2000);
+  });
+}
+
+// 승인 페이지 진입 감지
+const urlParams = new URLSearchParams(location.search);
+if (urlParams.get('approve') === '1') {
+  document.getElementById('mainForm').closest('.wrap') ? document.querySelector('.wrap').style.display = 'none' : null;
+  document.querySelectorAll('.wrap')[0].style.display = 'none';
+  document.getElementById('approvalPage').style.display = 'block';
+  document.getElementById('ap_name').textContent = urlParams.get('name') || '-';
+  document.getElementById('ap_dept').textContent = urlParams.get('dept') || '-';
+  document.getElementById('ap_company').textContent = urlParams.get('company') || '-';
+  document.getElementById('ap_period').textContent = urlParams.get('period') || '-';
+}
+
+// 승인 페이지 서명 캔버스
+const apCanvas = document.getElementById('apSigCanvas');
+if (apCanvas) {
+  const apCtx = apCanvas.getContext('2d');
+  let apDrawing = false, apHasSig = false;
+  function resizeApCanvas() {
+    const w = apCanvas.offsetWidth;
+    const dpr = window.devicePixelRatio || 1;
+    apCanvas.width = w * dpr; apCanvas.height = 150 * dpr;
+    apCanvas.style.height = '150px';
+    apCtx.scale(dpr, dpr);
+    apCtx.strokeStyle = '#1a1a1a'; apCtx.lineWidth = 2; apCtx.lineCap = 'round'; apCtx.lineJoin = 'round';
+  }
+  resizeApCanvas();
+  window.addEventListener('resize', resizeApCanvas);
+  function apGetPos(e) { const r = apCanvas.getBoundingClientRect(); const src = e.touches ? e.touches[0] : e; return { x: src.clientX - r.left, y: src.clientY - r.top }; }
+  apCanvas.addEventListener('mousedown', e => { apDrawing = true; const p = apGetPos(e); apCtx.beginPath(); apCtx.moveTo(p.x, p.y); });
+  apCanvas.addEventListener('mousemove', e => { if (!apDrawing) return; const p = apGetPos(e); apCtx.lineTo(p.x, p.y); apCtx.stroke(); apHasSig = true; });
+  apCanvas.addEventListener('mouseup', () => { apDrawing = false; });
+  apCanvas.addEventListener('touchstart', e => { e.preventDefault(); apDrawing = true; const p = apGetPos(e); apCtx.beginPath(); apCtx.moveTo(p.x, p.y); }, { passive: false });
+  apCanvas.addEventListener('touchmove', e => { e.preventDefault(); if (!apDrawing) return; const p = apGetPos(e); apCtx.lineTo(p.x, p.y); apCtx.stroke(); apHasSig = true; }, { passive: false });
+  apCanvas.addEventListener('touchend', () => { apDrawing = false; });
+  document.getElementById('apClearSig').addEventListener('click', () => {
+    const dpr = window.devicePixelRatio || 1;
+    apCtx.clearRect(0, 0, apCanvas.width / dpr, 150);
+    apHasSig = false;
+  });
+
+  window.submitApproval = async function() {
+    const approverName = document.getElementById('ap_approverName').value.trim();
+    if (!approverName) { alert('직책자 성명을 입력해 주세요.'); return; }
+    if (!apHasSig) { alert('서명을 해주세요.'); return; }
+    const btn = document.getElementById('apSubmitBtn');
+    btn.disabled = true; btn.textContent = '제출 중...';
+
+    const fd = new FormData();
+    fd.append('_subject', `[겸업 승인완료] ${urlParams.get('name')} 직책자 서명`);
+    fd.append('구분', '직책자 승인 서명');
+    fd.append('신청자_성명', urlParams.get('name') || '');
+    fd.append('신청자_소속', urlParams.get('dept') || '');
+    fd.append('겸업_회사명', urlParams.get('company') || '');
+    fd.append('겸업_기간', urlParams.get('period') || '');
+    fd.append('직책자_성명', approverName);
+    fd.append('서명완료여부', '직책자 서명 완료');
+
+    try {
+      const res = await fetch('https://formspree.io/f/mqejkpgg', {
+        method: 'POST', body: fd, headers: { Accept: 'application/json' }
+      });
+      const toast = document.getElementById('apToast');
+      if (res.ok) {
+        toast.className = 'toast ok';
+        toast.textContent = '✓ 승인 서명이 완료되었습니다. HR 담당자에게 전달됩니다.';
+        toast.style.display = 'block';
+        btn.textContent = '승인 완료 ✓';
+      } else {
+        toast.className = 'toast err';
+        toast.textContent = '제출에 실패했습니다. 잠시 후 다시 시도해 주세요.';
+        toast.style.display = 'block';
+        btn.disabled = false; btn.textContent = '승인 서명 제출';
+      }
+    } catch (err) {
+      const toast = document.getElementById('apToast');
+      toast.className = 'toast err';
+      toast.textContent = '네트워크 오류가 발생했습니다.';
+      toast.style.display = 'block';
+      btn.disabled = false; btn.textContent = '승인 서명 제출';
+    }
+  };
+}
 </script>
 </body>
 </html>
