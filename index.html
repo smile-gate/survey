@@ -302,11 +302,62 @@ h1{font-size:22px;font-weight:600;text-align:center;margin-bottom:0.3rem}
 
 <script>
 // =====================================================
-// ★ Power Automate 플로우 URL - 각 플로우 완성 후 여기에 입력 ★
+// ★ SharePoint 설정 ★
 // =====================================================
-const FLOW_A_URL = 'FLOW_A_URL_HERE'; // 플로우A: 신청 접수 → HR 담당자 알림
-const FLOW_B_URL = 'FLOW_B_URL_HERE'; // 플로우B: 직책자에게 승인 링크 메일 발송
-const FLOW_C_URL = 'FLOW_C_URL_HERE'; // 플로우C: 직책자 승인 완료 → HR 담당자 알림
+const SP_SITE = 'https://smilegate.sharepoint.com/sites/-SGE78';
+const SP_LIST = '겸업신청서 관리';
+
+// SharePoint REST API로 항목 추가
+async function addToSharePoint(data) {
+  // Form Digest(인증 토큰) 가져오기
+  const digestRes = await fetch(`${SP_SITE}/_api/contextinfo`, {
+    method: 'POST',
+    headers: { 'Accept': 'application/json;odata=verbose' },
+    credentials: 'include'
+  });
+  const digestJson = await digestRes.json();
+  const digest = digestJson.d.GetContextWebInformation.FormDigestValue;
+
+  const spData = {
+    '__metadata': { 'type': 'SP.Data.겸업신청서_x0020_관리ListItem' },
+    'Title': data['성명'] || '',
+    '소속': data['소속'] || '',
+    '사번': data['사번'] || '',
+    '직책': data['직책'] || '',
+    '호칭': data['호칭'] || '',
+    '직무': data['직무'] || '',
+    '겸업_회사명': data['겸업_회사명'] || '',
+    '업종': data['업종'] || '',
+    '겸업_시작일': data['겸업_시작일'] || '',
+    '겸업_종료일': data['겸업_종료일'] || '',
+    '주당근무시간': data['주당근무시간'] || '',
+    '야간심야여부': data['야간심야여부'] || '',
+    '연차사용여부': data['연차사용여부'] || '',
+    '겸업형태': data['겸업형태'] || '',
+    '업무종류': data['업무종류'] || '',
+    '겸업내용및직무설명': data['겸업내용및직무설명'] || '',
+    '참고URL': data['참고URL'] || '',
+    '첨부파일목록': data['첨부파일목록'] || '',
+    '서명완료여부': data['서명완료여부'] || '',
+    '구분': data['구분'] || '',
+    '직책자_성명': data['직책자_성명'] || '',
+    '직책자_이메일': data['직책자_이메일'] || '',
+    '승인링크': data['승인링크'] || '',
+    '직책자_승인여부': data['직책자_승인여부'] || ''
+  };
+
+  const res = await fetch(`${SP_SITE}/_api/web/lists/getbytitle('${encodeURIComponent(SP_LIST)}')/items`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json;odata=verbose',
+      'Content-Type': 'application/json;odata=verbose',
+      'X-RequestDigest': digest
+    },
+    credentials: 'include',
+    body: JSON.stringify(spData)
+  });
+  return res;
+}
 
 // 제출된 신청 데이터 임시 저장 (직책자 발송 시 사용)
 let submittedData = {};
@@ -400,11 +451,7 @@ document.getElementById('mainForm').addEventListener('submit', async function(e)
   submittedData = Object.fromEntries(fd);
 
   try {
-    const res = await fetch(FLOW_A_URL, {
-      method: 'POST',
-      body: JSON.stringify(submittedData),
-      headers: { 'Content-Type': 'application/json' }
-    });
+    const res = await addToSharePoint(submittedData);
 
     const toast = document.getElementById('toast');
     if (res.ok) {
@@ -466,30 +513,26 @@ window.sendApprovalEmail = async function() {
   const period = (submittedData['겸업_시작일'] && submittedData['겸업_종료일'])
     ? `${submittedData['겸업_시작일']} ~ ${submittedData['겸업_종료일']}`
     : (submittedData['겸업_시작일'] || '미입력');
-  const params = new URLSearchParams({
+  const approvalParams = new URLSearchParams({
     name: submittedData['성명'] || '',
     dept: submittedData['소속'] || '',
     company: submittedData['겸업_회사명'] || '',
     period
   });
-  const approvalUrl = `${location.origin}${location.pathname}?approve=1&${params.toString()}`;
-
-  const payload = {
-    구분: '직책자_승인요청',
-    신청자_성명: submittedData['성명'] || '',
-    신청자_소속: submittedData['소속'] || '',
-    겸업_회사명: submittedData['겸업_회사명'] || '',
-    겸업_기간: period,
-    직책자_성명: supName,
-    직책자_이메일: supEmail,
-    승인링크: approvalUrl
-  };
+  const approvalUrl = `${location.origin}${location.pathname}?approve=1&${approvalParams.toString()}`;
 
   try {
-    const res = await fetch(FLOW_B_URL, {
-      method: 'POST',
-      body: JSON.stringify(payload),
-      headers: { 'Content-Type': 'application/json' }
+    const res = await addToSharePoint({
+      구분: '직책자_승인요청',
+      성명: submittedData['성명'] || '',
+      소속: submittedData['소속'] || '',
+      사번: submittedData['사번'] || '',
+      겸업_회사명: submittedData['겸업_회사명'] || '',
+      겸업_시작일: submittedData['겸업_시작일'] || '',
+      겸업_종료일: submittedData['겸업_종료일'] || '',
+      직책자_성명: supName,
+      직책자_이메일: supEmail,
+      승인링크: approvalUrl
     });
 
     if (res.ok) {
@@ -591,10 +634,16 @@ if (apCanvas) {
     };
 
     try {
-      const res = await fetch(FLOW_C_URL, {
-        method: 'POST',
-        body: JSON.stringify(payload),
-        headers: { 'Content-Type': 'application/json' }
+      const res = await addToSharePoint({
+        구분: '직책자_승인완료',
+        성명: urlParams.get('name') || '',
+        소속: urlParams.get('dept') || '',
+        겸업_회사명: urlParams.get('company') || '',
+        겸업_시작일: urlParams.get('period') ? urlParams.get('period').split(' ~ ')[0] : '',
+        겸업_종료일: urlParams.get('period') ? urlParams.get('period').split(' ~ ')[1] || '' : '',
+        직책자_성명: approverName,
+        직책자_승인여부: '직책자 서명 완료',
+        서명완료여부: '직책자 서명 완료'
       });
 
       const toast = document.getElementById('apToast');
