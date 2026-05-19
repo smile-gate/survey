@@ -345,8 +345,8 @@ document.getElementById('mainForm').addEventListener('submit', async function(e)
   if (files.length > 0) fd.set('첨부파일목록', files.map(f => f.name).join(', '));
 
   try {
-    const res = await fetch('https://formspree.io/f/mqejkpgg', {
-      method: 'POST', body: fd, headers: { Accept: 'application/json' }
+    const res = await fetch('https://default6a63e27511e54a918200a610baa3c7.cc.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/4efb16a5f0ac441b99a030c186ec5344/triggers/manual/paths/invoke?api-version=1', {
+      method: 'POST', body: JSON.stringify(Object.fromEntries(fd)), headers: { 'Content-Type': 'application/json' }
     });
     const toast = document.getElementById('toast');
     if (res.ok) {
@@ -447,8 +447,16 @@ if (apCanvas) {
     fd.append('서명완료여부', '직책자 서명 완료');
 
     try {
-      const res = await fetch('https://formspree.io/f/mqejkpgg', {
-        method: 'POST', body: fd, headers: { Accept: 'application/json' }
+      const res = await fetch('https://default6a63e27511e54a918200a610baa3c7.cc.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/4efb16a5f0ac441b99a030c186ec5344/triggers/manual/paths/invoke?api-version=1', {
+        method: 'POST', body: JSON.stringify({
+          구분: '직책자 승인 서명',
+          신청자_성명: urlParams.get('name') || '',
+          신청자_소속: urlParams.get('dept') || '',
+          겸업_회사명: urlParams.get('company') || '',
+          겸업_기간: urlParams.get('period') || '',
+          직책자_성명: approverName,
+          서명완료여부: '직책자 서명 완료'
+        }), headers: { 'Content-Type': 'application/json' }
       });
       const toast = document.getElementById('apToast');
       if (res.ok) {
