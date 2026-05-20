@@ -337,7 +337,9 @@ function resizeCanvas() {
   ctx.scale(dpr, dpr);
   ctx.strokeStyle = '#1a1a1a'; ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
 }
-resizeCanvas();
+window.addEventListener('load', () => {
+  resizeCanvas();
+});
 window.addEventListener('resize', resizeCanvas);
 function getPos(e) {
   const r = canvas.getBoundingClientRect();
@@ -410,7 +412,6 @@ document.getElementById('mainForm').addEventListener('submit', async function(e)
   const approvalUrl = `${location.origin}${location.pathname}?approve=1&${params.toString()}`;
 
   try {
-    // Forms에 HR 알림 데이터 전송 (백그라운드)
     await submitToForms(FORMS_HR_URL, submittedData);
 
     const toast = document.getElementById('toast');
@@ -425,20 +426,15 @@ document.getElementById('mainForm').addEventListener('submit', async function(e)
     setTimeout(() => {
       document.getElementById('supervisorSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 300);
+
+  } catch (err) {
+    const toast = document.getElementById('toast');
+    toast.className = 'toast err';
+    toast.textContent = '네트워크 오류가 발생했습니다. 인터넷 연결을 확인해 주세요.';
+    toast.style.display = 'block';
+    btn.disabled = false; btn.textContent = '신청서 제출';
+  }
 });
-
-// =====================================================
-// 직책자 승인 링크 메일 발송 → 플로우B
-// =====================================================
-window.sendApprovalEmail = async function() {
-  const supName = document.getElementById('supervisorName').value.trim();
-  const supEmail = document.getElementById('supervisorEmail').value.trim();
-  const toast = document.getElementById('sendToast');
-  const btn = document.getElementById('sendApprovalBtn');
-
-  if (!supName) { alert('직책자 성명을 입력해 주세요.'); return; }
-  if (!supEmail) { alert('직책자 이메일을 입력해 주세요.'); return; }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(supEmail)) { alert('올바른 이메일 형식을 입력해 주세요.'); return; }
 
 // =====================================================
 // 링크 복사
@@ -479,7 +475,9 @@ if (apCanvas) {
     apCtx.scale(dpr, dpr);
     apCtx.strokeStyle = '#1a1a1a'; apCtx.lineWidth = 2; apCtx.lineCap = 'round'; apCtx.lineJoin = 'round';
   }
-  resizeApCanvas();
+  window.addEventListener('load', () => {
+    resizeApCanvas();
+  });
   window.addEventListener('resize', resizeApCanvas);
   function apGetPos(e) {
     const r = apCanvas.getBoundingClientRect();
